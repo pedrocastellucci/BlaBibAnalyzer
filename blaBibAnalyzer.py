@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
 
+
 def processBibFile(filename):
 
     authorsGroup = []
@@ -71,24 +72,23 @@ for year, count in yearDict.iteritems():
 labels = {}
 collaborators = nx.Graph()
 for group in authorsGroups:
-    print len(group)
+
     if len(group) == 1:
-        collaborators.add_node(group[0])
-        labels[group[0]] = unicode(group[0][:2])
+        collaborators.add_node(group[0][:2])
+        labels[group[0]] = group[0][:2]
     else:
         for i, a1 in enumerate(group):
             if i + 1 < len(group):
                 for a2 in group[i+1:]:
-                    collaborators.add_edge(a1, a2)
-                    labels[a1] = unicode(a1[:2])
-                    labels[a2] = unicode(a2[:2])
+                    collaborators.add_edge(a1[:2], a2[:2])
+                    labels[a1] = a1[:2]
+                    labels[a2] = a2[:2]
 
-pos = nx.spring_layout(collaborators, k=0.4, scale=10)
+pos = nx.pygraphviz_layout(collaborators)
 nx.draw_networkx_nodes(collaborators, pos, node_size=300)
 nx.draw_networkx_edges(collaborators, pos)
-nx.draw_networkx_labels(collaborators, pos, labels=labels)
+nx.draw_networkx_labels(collaborators, pos)
 
-#nx.draw(collaborators, pos)
 plt.show()
 
 
