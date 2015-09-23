@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
 
+import random
 
 def processBibFile(filename):
 
@@ -48,7 +49,7 @@ def processBibFile(filename):
     return authorsGroup, yearDict, journalsDict
 
     
-filename = 'test.bib'
+filename = 'testCLP.bib'
 
 authorsGroups, yearDict, journalsDict = processBibFile(filename)
 
@@ -69,25 +70,35 @@ for year, count in yearDict.iteritems():
 #rects1 = plt.bar(x, y)
 #plt.show()
 
+count = 1
 labels = {}
+
+for group in authorsGroups:
+    for a in group:
+        if a not in labels.keys():
+            labels[a] = count
+            count += 1
+
 collaborators = nx.Graph()
 for group in authorsGroups:
-
     if len(group) == 1:
-        collaborators.add_node(group[0][:2])
-        labels[group[0]] = group[0][:2]
+        collaborators.add_node(labels[group[0]])
     else:
         for i, a1 in enumerate(group):
             if i + 1 < len(group):
                 for a2 in group[i+1:]:
-                    collaborators.add_edge(a1[:2], a2[:2])
-                    labels[a1] = a1[:2]
-                    labels[a2] = a2[:2]
+                    collaborators.add_edge(labels[a1], labels[a2])
 
 pos = nx.pygraphviz_layout(collaborators)
+
 nx.draw_networkx_nodes(collaborators, pos, node_size=300)
 nx.draw_networkx_edges(collaborators, pos)
 nx.draw_networkx_labels(collaborators, pos)
+
+ordAuthors = sorted(labels.keys())
+
+for x in ordAuthors:
+    print x, '\t\t', labels[x]
 
 plt.show()
 
