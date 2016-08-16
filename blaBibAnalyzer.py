@@ -9,6 +9,7 @@ import sys
 def printSplash():
     print ('=============== BlaBibAnalyzer ===============')
     print ('==Copyright (c) 2015 Pedro Belin Castellucci==')
+    print ('==============================================')
 
 
 def printUsage():
