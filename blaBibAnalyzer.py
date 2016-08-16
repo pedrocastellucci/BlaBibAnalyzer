@@ -168,6 +168,7 @@ def plotCollaborationGraph(authorsGroups):
 
 if __name__ == '__main__':
 
+    printSplash()
     if len(sys.argv) != 2:
         printUsage()
         exit(0)
