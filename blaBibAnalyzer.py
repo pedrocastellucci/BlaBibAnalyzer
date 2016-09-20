@@ -131,7 +131,12 @@ def plotBarPerYear(yearDict):
 def printAuthorsCounts(authorsDict):
 
     print ('Last name, First name \t Publications')
-    for i, j in authorsDict.items():
+
+    sortedAuthorsCount = authorsDict.items()
+    sortedAuthorsCount = sorted(
+        sortedAuthorsCount, key=lambda x: x[1], reverse=True)
+
+    for i, j in sortedAuthorsCount:
         names = i.split(',')
         print ('%s, %s\t%d' % (names[0].strip(), names[1].strip()[0], j))
 
@@ -139,20 +144,30 @@ def printAuthorsCounts(authorsDict):
 def printJournalsCount(journalsDict):
 
     print ('Journal \t Publications')
-    for i, j in journalsDict.items():
+
+    sortedList = journalsDict.items()
+    sortedList = sorted(sortedList, key=lambda x: int(x[1]), reverse=True)
+
+    for i, j in sortedList:
         print ('%s\t%d' % (i, int(j)))
 
 
 def plotCollaborationGraph(authorsGroups):
 
+    authors = []
+    for group in authorsGroups:
+        for a in group:
+            authors.append(a)
+
+    authors = list(set(authors))
+    authors = sorted(authors)
+
     count = 1
     labels = {}
 
-    for group in authorsGroups:
-        for a in group:
-            if a not in labels.keys():
-                labels[a] = count
-                count += 1
+    for a in authors:
+        labels[a] = count
+        count += 1
 
     collaborators = nx.Graph()
     for group in authorsGroups:
@@ -179,10 +194,8 @@ def plotCollaborationGraph(authorsGroups):
     nx.draw_networkx_edges(collaborators, pos)
     nx.draw_networkx_labels(collaborators, pos, fontsize=30)
 
-    ordAuthors = sorted(labels.keys())
-
     print('Last name, First name \t Number in graph')
-    for x in ordAuthors:
+    for x in authors:
         names = x.split(',')
         print ('%s, %s \t %d' % (
             names[0].strip(), names[1].strip()[0], labels[x]))
