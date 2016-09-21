@@ -160,7 +160,7 @@ def plotCollaborationGraph(authorsGroups):
             authors.append(a)
 
     authors = list(set(authors))
-    authors = sorted(authors)
+    authors = sorted(authors, key=str.upper)
 
     count = 1
     labels = {}
