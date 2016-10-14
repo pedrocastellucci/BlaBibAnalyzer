@@ -17,9 +17,7 @@
 
 ''' 
     If you use this in a publication please cite:
-
     Castellucci, P. B.; BlaBibAnalyzer A tool for extracting bibliographic information. (2016). 
-
     https://www.researchgate.net/publication/306223436_BlaBibAnalyzer_A_tool_for_extracting_bibliographic_information
  
 '''
@@ -188,8 +186,20 @@ def plotCollaborationGraph(authorsGroups):
 
         pos = nx.random_layout(collaborators)
 
+    minPublications = min(authorsDict.values())
+    maxPublications = max(authorsDict.values())
+    pubsAmplitude = maxPublications - minPublications
+    minNodeSize = 250
+    maxNodeSize = 800
+    sizeAmplitude = (maxNodeSize - minNodeSize)
+
+    nodeSizes = [0]*len(collaborators.nodes())
+    for a in authors:
+        nodeSizes[labels[a]-1] = sizeAmplitude*(
+            authorsDict[a] - minPublications)/(pubsAmplitude) + minNodeSize
+
     nx.draw_networkx_nodes(
-        collaborators, pos, node_size=450, node_color='w')
+        collaborators, pos, node_size=nodeSizes, node_color='w')
 
     nx.draw_networkx_edges(collaborators, pos)
     nx.draw_networkx_labels(collaborators, pos, fontsize=30)
